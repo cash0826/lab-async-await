@@ -9,6 +9,7 @@ async function fetchAndDisplayPosts() {
         const response = await fetch('https://jsonplaceholder.typicode.com/posts');
         const posts = await response.json();
         displayPosts(posts);
+        return posts; // Return the posts for testing purposes
     } catch (error) {
         console.error('Error fetching posts:', error);
     }
@@ -16,7 +17,8 @@ async function fetchAndDisplayPosts() {
 fetchAndDisplayPosts();
 
 function displayPosts(posts) {
-    const postsList = document.querySelector('#post-list');
+    const postsDisplay = document.querySelector('#post-list');
+    postsDisplay.innerHTML = '';
     posts.forEach(post => {
         const listItem = document.createElement('li');
         const title = document.createElement('h1');
@@ -25,7 +27,11 @@ function displayPosts(posts) {
         body.textContent = post.body;
         listItem.appendChild(title);
         listItem.appendChild(body); // appends title (h1) and body(p) to the list item (li)
-        postsList.appendChild(listItem); // appends the list item (li) to the post list (ul)
+        postsDisplay.appendChild(listItem); // appends the list item (li) to the post list (ul)
     });
-};
+}
 
+// Export for test access
+if (typeof module !== 'undefined') {
+    module.exports = { fetchAndDisplayPosts, displayPosts };
+}
